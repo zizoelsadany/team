@@ -1,0 +1,58 @@
+[
+  {
+    "_id": "admin_123",
+    "name": "Zizo Elsadany",
+    "email": "zizoelsadany7@gmail.com",
+    "role": "Admin",
+    "assignedSection": "None",
+    "picture": "https://via.placeholder.com/150"
+  },
+  {
+    "_id": "Eslam",
+    "name": "Eslam",
+    "email": "eslam@example.com",
+    "role": "Team Member",
+    "assignedSection": "Backend",
+    "picture": "https://via.placeholder.com/150"
+  },
+  {
+    "_id": "ALi",
+    "name": "Ali",
+    "email": "ali@gmail.com",
+    "role": "Team Member",
+    "assignedSection": "Backend",
+    "picture": "https://via.placeholder.com/150"
+  },
+  {
+    "_id": "Khalad",
+    "name": "Khalad",
+    "email": "khalad@gmail.com",
+    "role": "Team Member",
+    "assignedSection": "Backend",
+    "picture": "https://via.placeholder.com/150"
+  },
+  {
+    "_id": "mohamed",
+    "name": "mohamed",
+    "email": "mohamed@gmail.com",
+    "role": "Team Member",
+    "assignedSection": "Backend",
+    "picture": "https://via.placeholder.com/150"
+  },
+  {
+    "_id": "hassan",
+    "name": "hassan",
+    "email": "hassan@gmail.com",
+    "role": "Team Member",
+    "assignedSection": "Backend",
+    "picture": "https://via.placeholder.com/150"
+  },
+  {
+    "_id": "Arwa",
+    "name": "Arwa",
+    "email": "arwa@gmail.com",
+    "role": "Team Member",
+    "assignedSection": "Backend",
+    "picture": "https://via.placeholder.com/150"
+  }
+]

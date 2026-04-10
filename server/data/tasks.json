@@ -1,0 +1,53 @@
+[
+  {
+    "title": "Student.java",
+    "description": "مطلوب عمل هذا الكلاس ب اسماء المتغيرات المطلوبه منكم ",
+    "assignedTo": [
+      "Khalad",
+      "Ali"
+    ],
+    "section": "Testing",
+    "deadline": "2026-04-20",
+    "_id": "1775855672776",
+    "files": [],
+    "status": "Pending"
+  },
+  {
+    "title": "StudentManagementSystem.java",
+    "description": "مطلوب عمل هذا الكلاس ب اسماء المتغيرات المطلوبه منكم ",
+    "assignedTo": [
+      "Eslam",
+      "mohamed"
+    ],
+    "section": "Testing",
+    "deadline": "2026-04-20",
+    "_id": "1775855728156",
+    "files": [],
+    "status": "Pending"
+  },
+  {
+    "title": "Main.java",
+    "description": "واجهه البرنامج مطلوب عمل هذه الواجهه ",
+    "assignedTo": [
+      "admin_123",
+      "hassan"
+    ],
+    "section": "Testing",
+    "deadline": "2026-04-20",
+    "_id": "1775855776889",
+    "files": [],
+    "status": "Pending"
+  },
+  {
+    "title": "subject.java",
+    "description": "مطلوب عمل هذا الكلاس منك ",
+    "assignedTo": [
+      "Arwa"
+    ],
+    "section": "Testing",
+    "deadline": "2026-04-20",
+    "_id": "1775855830771",
+    "files": [],
+    "status": "Pending"
+  }
+]
