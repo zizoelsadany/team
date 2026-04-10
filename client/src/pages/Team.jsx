@@ -16,7 +16,6 @@ const Team = () => {
   const fetchUsers = async () => {
     try {
       const res = await axios.get('/api/users', {
-      const res = await axios.get('/api/users', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsers(res.data);
