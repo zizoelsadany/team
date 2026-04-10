@@ -9,15 +9,23 @@ passport.use(new GoogleStrategy({
   },
   async (accessToken, refreshToken, profile, done) => {
     try {
-      let user = await User.findOne({ googleId: profile.id });
+      let user = await User.findOne({ 
+        $or: [
+          { googleId: profile.id },
+          { email: profile.emails[0].value }
+        ]
+      });
+
       if (!user) {
-        user = await User.create({
-          googleId: profile.id,
-          name: profile.displayName,
-          email: profile.emails[0].value,
-          picture: profile.photos[0].value,
-          role: 'Team Member' // Default role
-        });
+        // Stop any external user from creating an account
+        return done(null, false, { message: 'Unauthorized email' });
+      }
+
+      // If user exists but hasn't linked Google yet, link it
+      if (!user.googleId) {
+        user.googleId = profile.id;
+        if (!user.picture) user.picture = profile.photos[0].value;
+        await user.save();
       }
       return done(null, user);
     } catch (err) {

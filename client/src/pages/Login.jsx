@@ -10,13 +10,13 @@ const Login = () => {
   const [error, setError] = React.useState('');
 
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:5000/api/auth/google';
+    window.location.href = '/api/auth/google';
   };
 
   const handleEmailLogin = async (e) => {
     if (e) e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login-email', { email });
+      const res = await axios.post('/api/auth/login-email', { email });
       login(res.data.token, res.data.user);
       window.location.href = '/';
     } catch (err) {

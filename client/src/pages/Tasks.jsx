@@ -28,7 +28,7 @@ const Tasks = () => {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/tasks', {
+      const res = await axios.get('/api/tasks', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTasks(res.data);
@@ -37,7 +37,7 @@ const Tasks = () => {
 
   const fetchTeam = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/users', {
+      const res = await axios.get('/api/users', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTeamMembers(res.data);
@@ -47,7 +47,7 @@ const Tasks = () => {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/tasks', newTask, {
+      await axios.post('/api/tasks', newTask, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setShowCreate(false);
@@ -57,7 +57,7 @@ const Tasks = () => {
 
   const handleComplete = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/api/tasks/${id}/complete`, {}, {
+      await axios.put(`/api/tasks/${id}/complete`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchTasks();
@@ -68,7 +68,7 @@ const Tasks = () => {
     const formData = new FormData();
     formData.append('file', file);
     try {
-      await axios.post(`http://localhost:5000/api/tasks/${taskId}/upload`, formData, {
+      await axios.post(`/api/tasks/${taskId}/upload`, formData, {
         headers: { 
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
@@ -82,7 +82,7 @@ const Tasks = () => {
   const handleDeleteTask = async (id) => {
     if (window.confirm('Are you sure you want to delete this task?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/tasks/${id}`, {
+        await axios.delete(`/api/tasks/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         fetchTasks();
@@ -213,7 +213,7 @@ const Tasks = () => {
                  {task.files.map((f, i) => (
                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', opacity: 0.8, marginBottom: '4px' }}>
                      <FileText size={12} />
-                     <a href={`http://localhost:5000/${f.url}`} target="_blank" rel="noreferrer" style={{ color: 'var(--primary)', textDecoration: 'none' }}>{f.name}</a>
+                     <a href={`/${f.url}`} target="_blank" rel="noreferrer" style={{ color: 'var(--primary)', textDecoration: 'none' }}>{f.name}</a>
                    </div>
                  ))}
               </div>

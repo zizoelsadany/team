@@ -15,7 +15,8 @@ const Team = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/users', {
+      const res = await axios.get('/api/users', {
+      const res = await axios.get('/api/users', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsers(res.data);
@@ -26,7 +27,7 @@ const Team = () => {
 
   const handleUpdate = async (userId, data) => {
     try {
-      await axios.put(`http://localhost:5000/api/users/${userId}`, data, {
+      await axios.put(`/api/users/${userId}`, data, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchUsers();
@@ -38,7 +39,7 @@ const Team = () => {
   const handleDelete = async (userId) => {
     if (window.confirm('Are you sure you want to remove this member?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/users/${userId}`, {
+        await axios.delete(`/api/users/${userId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         fetchUsers();
