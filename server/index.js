@@ -2,17 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const connectDB = require('./config/db');
-
-// Connect to Database
-connectDB();
+const { db } = require('./config/firebase');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// Database initialized via connectDB() in line 8
+console.log('Firebase Firestore initialized.');
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
