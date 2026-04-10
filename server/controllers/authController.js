@@ -10,13 +10,8 @@ const loginEmail = async (req, res) => {
   try {
     let user = await User.findOne({ email });
     if (!user) {
-      // Create user if not found
-      user = await User.create({
-        name: email.split('@')[0],
-        email: email,
-        role: 'Team Member',
-        assignedSection: 'None',
-        picture: 'https://via.placeholder.com/150'
+      return res.status(403).json({ 
+        message: 'Access Denied: This email is not authorized to access this dashboard.' 
       });
     }
     const token = generateToken(user._id);
