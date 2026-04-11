@@ -2,14 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { db } = require('./config/firebase');
+const mockDb = require('./config/mockDb');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-console.log('Firebase Firestore initialized.');
+console.log('Mock Database initialized.');
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
@@ -22,8 +22,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const PORT = process.env.PORT || 5000;
 
 if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  app.listen(PORT, '127.0.0.1', () => {
+    console.log(`Server running on http://127.0.0.1:${PORT}`);
   });
 }
 

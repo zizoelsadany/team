@@ -1,4 +1,4 @@
-const { db } = require('../config/firebase');
+const mockDb = require('../config/mockDb');
 
 const createTask = async (req, res) => {
   const { title, description, assignedTo, section, deadline } = req.body;
@@ -9,12 +9,10 @@ const createTask = async (req, res) => {
       assignedTo: Array.isArray(assignedTo) ? assignedTo : [assignedTo],
       section,
       deadline,
-      status: 'Pending',
-      files: [],
       createdAt: new Date().toISOString()
     };
-    const docRef = await db.collection('tasks').add(taskData);
-    res.status(201).json({ _id: docRef.id, ...taskData });
+    const newTask = mockDb.tasks.create(taskData);
+    res.status(201).json(newTask);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -22,31 +20,13 @@ const createTask = async (req, res) => {
 
 const getTasks = async (req, res) => {
   try {
-    let tasksRef = db.collection('tasks');
-    let snapshot;
-
+    let tasks;
     if (req.user.role !== 'Admin') {
-      // Find tasks where req.user._id set in assignedTo array
-      snapshot = await tasksRef.where('assignedTo', 'array-contains', req.user._id).get();
+      tasks = mockDb.tasks.find({ assignedTo: req.user._id });
     } else {
-      snapshot = await tasksRef.get();
+      tasks = mockDb.tasks.find();
     }
-
-    const tasks = snapshot.docs.map(doc => ({ _id: doc.id, ...doc.data() }));
-
-    // Manual population of assignedTo (fetching user names/details)
-    const populatedTasks = await Promise.all(tasks.map(async (task) => {
-      if (task.assignedTo && task.assignedTo.length > 0) {
-        const userPromises = task.assignedTo.map(async (uid) => {
-          const userDoc = await db.collection('users').doc(uid).get();
-          return userDoc.exists ? { _id: userDoc.id, ...userDoc.data() } : { _id: uid, name: 'Unknown User' };
-        });
-        task.assignedTo = await Promise.all(userPromises);
-      }
-      return task;
-    }));
-
-    res.json(populatedTasks);
+    res.json(tasks);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -54,11 +34,11 @@ const getTasks = async (req, res) => {
 
 const completeTask = async (req, res) => {
   try {
-    const taskRef = db.collection('tasks').doc(req.params.id);
-    const doc = await taskRef.get();
-    if (doc.exists) {
-      await taskRef.update({ status: 'Completed' });
-      res.json({ _id: doc.id, ...doc.data(), status: 'Completed' });
+    const task = mockDb.tasks.findById(req.params.id);
+    if (task) {
+      task.status = 'Completed';
+      const updatedTask = mockDb.tasks.save(task);
+      res.json(updatedTask);
     } else {
       res.status(404).json({ message: 'Task not found' });
     }
@@ -69,18 +49,16 @@ const completeTask = async (req, res) => {
 
 const uploadFile = async (req, res) => {
   try {
-    const taskRef = db.collection('tasks').doc(req.params.id);
-    const doc = await taskRef.get();
-    if (doc.exists) {
-      const task = doc.data();
+    const task = mockDb.tasks.findById(req.params.id);
+    if (task) {
       const fileData = {
         name: req.file.originalname,
         url: req.file.path,
         status: 'Pending'
       };
-      const updatedFiles = [...(task.files || []), fileData];
-      await taskRef.update({ files: updatedFiles });
-      res.json({ _id: doc.id, ...task, files: updatedFiles });
+      task.files = [...(task.files || []), fileData];
+      const updatedTask = mockDb.tasks.save(task);
+      res.json(updatedTask);
     } else {
       res.status(404).json({ message: 'Task not found' });
     }
@@ -91,10 +69,9 @@ const uploadFile = async (req, res) => {
 
 const deleteTask = async (req, res) => {
   try {
-    const taskRef = db.collection('tasks').doc(req.params.id);
-    const doc = await taskRef.get();
-    if (doc.exists) {
-      await taskRef.delete();
+    const task = mockDb.tasks.findById(req.params.id);
+    if (task) {
+      mockDb.tasks.delete(req.params.id);
       res.json({ message: 'Task removed' });
     } else {
       res.status(404).json({ message: 'Task not found' });
