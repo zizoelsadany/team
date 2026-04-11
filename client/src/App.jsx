@@ -7,29 +7,6 @@ import Dashboard from './pages/Dashboard';
 import Tasks from './pages/Tasks';
 import Team from './pages/Team';
 
-const LoginSuccess = () => {
-  const { login } = useAuth();
-  React.useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get('token');
-    const userParam = params.get('user');
-    
-    if (token && userParam && userParam !== 'undefined') {
-      try {
-        const user = JSON.parse(userParam);
-        login(token, user);
-        window.location.href = '/';
-      } catch (e) {
-        console.error('Failed to parse user from URL', e);
-        window.location.href = '/login';
-      }
-    } else if (token) {
-        window.location.href = '/login';
-    }
-  }, []);
-  return <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Logging in...</div>;
-};
-
 const PrivateRoute = ({ children }) => {
   const { token } = useAuth();
   return token ? children : <Navigate to="/login" />;
@@ -64,7 +41,6 @@ function App() {
         <main className={token ? 'content' : ''} style={{ flex: 1 }}>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/login-success" element={<LoginSuccess />} />
             
             <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
             <Route path="/tasks" element={<PrivateRoute><Tasks /></PrivateRoute>} />

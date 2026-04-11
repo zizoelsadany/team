@@ -1,17 +1,11 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Layout } from 'lucide-react';
-import { FaGoogle } from 'react-icons/fa';
 import axios from 'axios';
-
 const Login = () => {
   const { login } = useAuth();
   const [email, setEmail] = React.useState('');
   const [error, setError] = React.useState('');
-
-  const handleGoogleLogin = () => {
-    window.location.href = '/api/auth/google';
-  };
 
   const handleEmailLogin = async (e) => {
     if (e) e.preventDefault();
@@ -39,7 +33,7 @@ const Login = () => {
         <h1 style={{ marginBottom: '0.5rem', color: 'white' }}>Welcome Back</h1>
         <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: '2.5rem' }}>Collaborate and manage your projects with ease.</p>
         
-        <form onSubmit={handleEmailLogin} style={{ marginBottom: '1.5rem' }}>
+        <form onSubmit={handleEmailLogin}>
           <input 
             type="email" 
             placeholder="Enter your email" 
@@ -54,29 +48,6 @@ const Login = () => {
             Access with Email
           </button>
         </form>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem', color: 'rgba(255,255,255,0.2)' }}>
-          <hr style={{ flex: 1, border: 'none', borderTop: '1px solid currentColor' }} />
-          <span style={{ fontSize: '0.8rem' }}>OR</span>
-          <hr style={{ flex: 1, border: 'none', borderTop: '1px solid currentColor' }} />
-        </div>
-
-        <button 
-          onClick={handleGoogleLogin}
-          className="btn-primary"
-          style={{ 
-            width: '100%', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            gap: '12px',
-            background: 'white',
-            color: '#1e293b',
-            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.2)'
-          }}
-        >
-          <FaGoogle color="#ea4335" /> Sign in with Google
-        </button>
         
         <p style={{ marginTop: '2rem', fontSize: '0.875rem', color: 'rgba(255,255,255,0.4)' }}>
           Only authorized team members can access.
