@@ -74,6 +74,7 @@ h1, h2, h3, h4, .brand {
   font-weight: 600;
 }
 
+/* Sidebar visible by default on desktop */
 .sidebar {
   width: 260px;
   height: 100vh;
@@ -84,14 +85,7 @@ h1, h2, h3, h4, .brand {
   flex-direction: column;
   z-index: 1000;
   transition: transform 0.3s ease;
-}
-
-.sidebar.mobile-hidden {
-  transform: translateX(-100%);
-}
-
-.sidebar.mobile-open {
-  transform: translateX(0);
+  transform: translateX(0); /* Default visible */
 }
 
 .content {
@@ -119,9 +113,14 @@ h1, h2, h3, h4, .brand {
   display: none;
 }
 
-/* Mobile Responsiveness Overhaul */
+/* Mobile Overhaul */
 @media (max-width: 768px) {
-  .sidebar { width: 260px; }
+  .sidebar { 
+    transform: translateX(-100%); /* Hidden by default on mobile */
+  }
+  .sidebar.mobile-open {
+    transform: translateX(0) !important;
+  }
   .content {
     margin-left: 0 !important;
     padding: 1rem !important;

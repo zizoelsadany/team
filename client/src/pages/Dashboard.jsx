@@ -141,7 +141,6 @@ double grade;`}
             </div>
           </div>
         </div>
-        </div>
       </div>
     </motion.div>
   );

@@ -25,7 +25,7 @@ const Sidebar = ({ isOpen, close }) => {
   }
 
   return (
-    <div className={`sidebar ${isOpen ? 'mobile-open' : 'mobile-hidden'}`}>
+    <div className={`sidebar ${isOpen ? 'mobile-open' : ''}`}>
       <div style={{ padding: '2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
         <div style={{ background: 'var(--primary)', padding: '8px', borderRadius: '8px' }}>
           <Layout color="white" size={24} />
