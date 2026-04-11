@@ -1,7 +1,13 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
+
+if (!process.env.JWT_SECRET) {
+  process.env.JWT_SECRET = 'temporary_fallback_secret_for_dev_only';
+  console.warn('⚠️ Warning: JWT_SECRET is missing from .env, using fallback.');
+}
+
 const mockDb = require('./config/mockDb');
 
 const app = express();
