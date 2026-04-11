@@ -114,9 +114,11 @@ const Tasks = () => {
              style={{ marginBottom: '2rem', border: '2px dashed var(--primary)' }}
            >
              <h3 style={{ marginBottom: '1.5rem' }}>Create New Task</h3>
-             <form onSubmit={handleCreate} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+             <form onSubmit={handleCreate} className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
                 <input required className="card" style={{ padding: '0.8rem' }} placeholder="Task Title" onChange={e => setNewTask({...newTask, title: e.target.value})} />
-                <div className="card" style={{ padding: '0.8rem', gridColumn: 'span 2' }}>
+                <input required type="date" className="card" style={{ padding: '0.8rem' }} onChange={e => setNewTask({...newTask, deadline: e.target.value})} />
+                
+                <div className="card" style={{ padding: '0.8rem', gridColumn: '1 / -1' }}>
                   <p style={{ fontSize: '0.75rem', fontWeight: '600', marginBottom: '0.5rem' }}>Assign To:</p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                     {teamMembers.map(m => (
@@ -136,12 +138,14 @@ const Tasks = () => {
                     ))}
                   </div>
                 </div>
-                <textarea required className="card" style={{ padding: '0.8rem', gridColumn: 'span 2' }} placeholder="Description" onChange={e => setNewTask({...newTask, description: e.target.value})} />
-                <select className="card" style={{ padding: '0.8rem' }} onChange={e => setNewTask({...newTask, section: e.target.value})}>
+                
+                <textarea required className="card" style={{ padding: '0.8rem', gridColumn: '1 / -1' }} placeholder="Description" onChange={e => setNewTask({...newTask, description: e.target.value})} />
+                
+                <select className="card" style={{ padding: '0.8rem', gridColumn: '1 / -1' }} onChange={e => setNewTask({...newTask, section: e.target.value})}>
                   {['Frontend', 'Backend', 'Database', 'UI', 'Testing'].map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
-                <input required type="date" className="card" style={{ padding: '0.8rem' }} onChange={e => setNewTask({...newTask, deadline: e.target.value})} />
-                <div style={{ gridColumn: 'span 2', display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+
+                <div style={{ gridColumn: '1 / -1', display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
                    <button type="button" onClick={() => setShowCreate(false)} style={{ background: 'none', border: 'none', color: 'var(--text)', cursor: 'pointer' }}>Cancel</button>
                    <button type="submit" className="btn-primary">Create Task</button>
                 </div>
@@ -150,7 +154,7 @@ const Tasks = () => {
         )}
       </AnimatePresence>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
+      <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
         {tasks.map((task) => (
           <motion.div layout key={task._id} className="card">
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>

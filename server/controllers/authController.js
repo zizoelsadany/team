@@ -9,10 +9,10 @@ const loginEmail = async (req, res) => {
   const { email } = req.body;
   try {
     const user = mockDb.users.findOne({ email });
-    
+
     if (!user) {
-      return res.status(403).json({ 
-        message: 'Access Denied: This email is not authorized to access this dashboard.' 
+      return res.status(403).json({
+        message: 'Access Denied: This email is not authorized to access this dashboard.'
       });
     }
 

@@ -42,11 +42,25 @@ const AdminRoute = ({ children }) => {
 
 function App() {
   const { token } = useAuth();
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   return (
     <Router>
-      <div style={{ display: 'flex', minHeight: '100vh' }}>
-        {token && <Sidebar />}
+      <div style={{ display: 'flex', minHeight: '100vh', position: 'relative' }}>
+        {token && (
+          <>
+            <button className="menu-toggle" onClick={toggleSidebar}>
+              <span style={{ fontSize: '1.5rem' }}>☰</span>
+            </button>
+            <div 
+              className={`overlay ${isSidebarOpen ? 'active' : ''}`} 
+              onClick={() => setIsSidebarOpen(false)}
+            ></div>
+            <Sidebar isOpen={isSidebarOpen} close={() => setIsSidebarOpen(false)} />
+          </>
+        )}
         <main className={token ? 'content' : ''} style={{ flex: 1 }}>
           <Routes>
             <Route path="/login" element={<Login />} />

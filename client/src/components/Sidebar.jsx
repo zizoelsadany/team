@@ -12,7 +12,7 @@ import {
   Layout
 } from 'lucide-react';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, close }) => {
   const { user, logout, toggleTheme, theme } = useAuth();
 
   const navItems = [
@@ -25,7 +25,7 @@ const Sidebar = () => {
   }
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${isOpen ? 'mobile-open' : 'mobile-hidden'}`}>
       <div style={{ padding: '2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
         <div style={{ background: 'var(--primary)', padding: '8px', borderRadius: '8px' }}>
           <Layout color="white" size={24} />
@@ -33,7 +33,7 @@ const Sidebar = () => {
         <h2 className="brand" style={{ fontSize: '1.25rem', fontWeight: '700' }}>CollabHub</h2>
       </div>
 
-      <nav style={{ flex: 1, padding: '0 1rem' }}>
+      <nav style={{ flex: 1, padding: '0 1rem' }} onClick={close}>
         {navItems.map((item) => (
           <NavLink
             key={item.path}

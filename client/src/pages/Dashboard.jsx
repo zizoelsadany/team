@@ -57,7 +57,7 @@ const Dashboard = () => {
         <p style={{ opacity: 0.6 }}>Here's what's happening with your project today.</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+      <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
         {statCards.map((stat, i) => (
           <div key={i} className="card" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
             <div style={{ background: stat.color, padding: '12px', borderRadius: '12px' }}>
@@ -77,7 +77,7 @@ const Dashboard = () => {
             <Layers size={32} /> Project Standards: Student Management System
           </h2>
           
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2.5rem' }}>
+          <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2.5rem' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
               <div>
                 <p style={{ fontWeight: '700', color: 'var(--primary)', marginBottom: '1rem', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
