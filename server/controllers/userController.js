@@ -1,8 +1,9 @@
-const mockDb = require('../config/mockDb');
+const { db } = require('../config/firebase');
 
 const getUsers = async (req, res) => {
   try {
-    const users = mockDb.users.find();
+    const snapshot = await db.collection('users').get();
+    const users = snapshot.docs.map(doc => ({ _id: doc.id, ...doc.data() }));
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -11,15 +12,17 @@ const getUsers = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const user = mockDb.users.findById(req.params.id);
-
-    if (user) {
-      user.role = req.body.role || user.role;
-      user.assignedSection = req.body.assignedSection || user.assignedSection;
-      user.updatedAt = new Date().toISOString();
-
-      const updatedUser = mockDb.users.save(user);
-      res.json(updatedUser);
+    const userRef = db.collection('users').doc(req.params.id);
+    const doc = await userRef.get();
+    
+    if (doc.exists) {
+      const updatedData = {
+        role: req.body.role || doc.data().role,
+        assignedSection: req.body.assignedSection || doc.data().assignedSection,
+        updatedAt: new Date().toISOString()
+      };
+      await userRef.update(updatedData);
+      res.json({ _id: doc.id, ...doc.data(), ...updatedData });
     } else {
       res.status(404).json({ message: 'User not found' });
     }
@@ -30,13 +33,15 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    const user = mockDb.users.findById(req.params.id);
-
-    if (user) {
+    const userRef = db.collection('users').doc(req.params.id);
+    const doc = await userRef.get();
+    
+    if (doc.exists) {
+      const user = doc.data();
       if (user.role === 'Admin' && user.email === 'zizoelsadany7@gmail.com') {
-        return res.status(400).json({ message: 'Cannot delete the main admin' });
+          return res.status(400).json({ message: 'Cannot delete the main admin' });
       }
-      mockDb.users.delete(req.params.id);
+      await userRef.delete();
       res.json({ message: 'User removed' });
     } else {
       res.status(404).json({ message: 'User not found' });

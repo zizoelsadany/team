@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const mockDb = require('../config/mockDb');
+const { db } = require('../config/firebase');
 
 const protect = async (req, res, next) => {
   let token;
@@ -7,14 +7,14 @@ const protect = async (req, res, next) => {
     try {
       token = req.headers.authorization.split(' ')[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      const user = mockDb.users.findById(decoded.id);
-
-      if (!user) {
+      
+      const userDoc = await db.collection('users').doc(decoded.id).get();
+      
+      if (!userDoc.exists) {
         throw new Error('User not found');
       }
 
-      req.user = user;
+      req.user = { _id: userDoc.id, ...userDoc.data() };
       next();
     } catch (error) {
       res.status(401).json({ message: 'Not authorized' });
@@ -28,7 +28,7 @@ const admin = (req, res, next) => {
   if (req.user && req.user.role === 'Admin') {
     next();
   } else {
-    res.status(401).json({ message: 'Not authorized as admin' });
+    res.status(401).json({ message: 'Not authorized as an admin' });
   }
 };
 

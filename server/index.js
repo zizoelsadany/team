@@ -8,14 +8,21 @@ if (!process.env.JWT_SECRET) {
   console.warn('⚠️ Warning: JWT_SECRET is missing from .env, using fallback.');
 }
 
-const mockDb = require('./config/mockDb');
+const fs = require('fs');
+const { db } = require('./config/firebase');
 
 const app = express();
+
+// Ensure uploads directory exists
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
 
 app.use(cors());
 app.use(express.json());
 
-console.log('Mock Database initialized.');
+console.log('Firebase Firestore initialized and ready.');
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));

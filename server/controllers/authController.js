@@ -1,31 +1,23 @@
 const jwt = require('jsonwebtoken');
-const mockDb = require('../config/mockDb');
-
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
-};
+const { db } = require('../config/firebase');
 
 const loginEmail = async (req, res) => {
   const { email } = req.body;
   try {
-    const user = mockDb.users.findOne({ email });
-
-    if (!user) {
-      return res.status(403).json({
-        message: 'Access Denied: This email is not authorized to access this dashboard.'
-      });
+    const snapshot = await db.collection('users').where('email', '==', email).get();
+    
+    if (snapshot.empty) {
+      return res.status(401).json({ message: 'User not authorized' });
     }
 
-    const token = generateToken(user._id);
-    res.json({ token, user });
+    const userDoc = snapshot.docs[0];
+    const user = { _id: userDoc.id, ...userDoc.data() };
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+    res.json({ user, token });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const authSuccess = (req, res) => {
-  // Not used in mock but kept for structure
-  res.redirect(`${process.env.CLIENT_URL}/login`);
-};
-
-module.exports = { authSuccess, loginEmail };
+module.exports = { loginEmail };
