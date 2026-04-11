@@ -12,10 +12,19 @@ const LoginSuccess = () => {
   React.useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get('token');
-    const user = JSON.parse(params.get('user'));
-    if (token && user) {
-      login(token, user);
-      window.location.href = '/';
+    const userParam = params.get('user');
+    
+    if (token && userParam && userParam !== 'undefined') {
+      try {
+        const user = JSON.parse(userParam);
+        login(token, user);
+        window.location.href = '/';
+      } catch (e) {
+        console.error('Failed to parse user from URL', e);
+        window.location.href = '/login';
+      }
+    } else if (token) {
+        window.location.href = '/login';
     }
   }, []);
   return <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Logging in...</div>;

@@ -10,7 +10,14 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (token) {
       const savedUser = localStorage.getItem('user');
-      if (savedUser) setUser(JSON.parse(savedUser));
+      if (savedUser && savedUser !== 'undefined') {
+        try {
+          setUser(JSON.parse(savedUser));
+        } catch (e) {
+          console.error('Error parsing user from localStorage', e);
+          logout();
+        }
+      }
     }
     document.documentElement.setAttribute('data-theme', theme);
   }, [token, theme]);

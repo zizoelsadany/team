@@ -24,7 +24,7 @@ const Dashboard = () => {
         const res = await axios.get('/api/tasks', {
           headers: { Authorization: `Bearer ${token}` }
         });
-        const tasks = res.data;
+        const tasks = Array.isArray(res.data) ? res.data : [];
         const completed = tasks.filter(t => t.status === 'Completed').length;
         setStats({
           totalTasks: tasks.length,

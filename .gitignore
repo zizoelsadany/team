@@ -9,3 +9,7 @@ server/uploads/*
 client/dist/
 server/node_modules/
 client/node_modules/
+serviceAccountKey.json
+.firebase/
+.firebaserc
+.env*
