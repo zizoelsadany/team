@@ -52,38 +52,38 @@ const Dashboard = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div style={{ marginBottom: '2.5rem' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: '700' }}>Welcome back, {user?.name.split(' ')[0]}!</h1>
-        <p style={{ opacity: 0.6 }}>Here's what's happening with your project today.</p>
+      <div style={{ marginBottom: '2rem' }}>
+        <h1 className="responsive-title" style={{ fontWeight: '700' }}>Welcome back, {user?.name.split(' ')[0]}!</h1>
+        <p style={{ opacity: 0.6, fontSize: '0.9rem' }}>Here's what's happening with your project today.</p>
       </div>
 
-      <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+      <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         {statCards.map((stat, i) => (
-          <div key={i} className="card" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            <div style={{ background: stat.color, padding: '12px', borderRadius: '12px' }}>
+          <div key={i} className="card" style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '1rem' }}>
+            <div style={{ background: stat.color, padding: '10px', borderRadius: '10px' }}>
               {stat.icon}
             </div>
             <div>
-              <p style={{ fontSize: '0.875rem', opacity: 0.6 }}>{stat.label}</p>
-              <h3 style={{ fontSize: '1.5rem' }}>{stat.value}</h3>
+              <p style={{ fontSize: '0.75rem', opacity: 0.6 }}>{stat.label}</p>
+              <h3 style={{ fontSize: '1.25rem' }}>{stat.value}</h3>
             </div>
           </div>
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }}>
-        <div className="card" style={{ border: '2px solid var(--primary)', padding: '2.5rem', background: 'rgba(139, 92, 246, 0.02)' }}>
-          <h2 style={{ color: 'var(--primary)', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.75rem' }}>
-            <Layers size={32} /> Project Standards: Student Management System
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
+        <div className="card" style={{ border: '1px solid var(--primary)', padding: '1.5rem', background: 'rgba(139, 92, 246, 0.02)' }}>
+          <h2 style={{ color: 'var(--primary)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.4rem' }}>
+            <Layers size={24} /> Project Standards
           </h2>
           
-          <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2.5rem' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               <div>
-                <p style={{ fontWeight: '700', color: 'var(--primary)', marginBottom: '1rem', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <p style={{ fontWeight: '700', color: 'var(--primary)', marginBottom: '0.8rem', fontSize: '1rem' }}>
                   👨‍🎓 Student Class
                 </p>
-                <pre style={{ background: 'rgba(0,0,0,0.3)', padding: '20px', borderRadius: '12px', fontSize: '1rem', border: '1px solid var(--border)', lineHeight: '1.6' }}>
+                <pre style={{ background: 'rgba(0,0,0,0.3)', padding: '15px', borderRadius: '8px', fontSize: '0.9rem', border: '1px solid var(--border)', lineHeight: '1.5', overflowX: 'auto' }}>
 {`int studentId;
 String studentName;
 String studentMajor;
@@ -92,10 +92,10 @@ ArrayList<Subject> subjects;`}
               </div>
               
               <div>
-                <p style={{ fontWeight: '700', color: 'var(--primary)', marginBottom: '1rem', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <p style={{ fontWeight: '700', color: 'var(--primary)', marginBottom: '0.8rem', fontSize: '1rem' }}>
                   📚 Subject Class
                 </p>
-                <pre style={{ background: 'rgba(0,0,0,0.3)', padding: '20px', borderRadius: '12px', fontSize: '1rem', border: '1px solid var(--border)', lineHeight: '1.6' }}>
+                <pre style={{ background: 'rgba(0,0,0,0.3)', padding: '15px', borderRadius: '8px', fontSize: '0.9rem', border: '1px solid var(--border)', lineHeight: '1.5', overflowX: 'auto' }}>
 {`String subjectName;
 int creditHours;
 double grade;`}
@@ -103,44 +103,44 @@ double grade;`}
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               <div>
-                <p style={{ fontWeight: '700', color: 'var(--primary)', marginBottom: '1rem', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  🧠 StudentManagementSystem Class
+                <p style={{ fontWeight: '700', color: 'var(--primary)', marginBottom: '0.8rem', fontSize: '1rem' }}>
+                  🧠 ManagementSystem Class
                 </p>
-                <pre style={{ background: 'rgba(0,0,0,0.3)', padding: '20px', borderRadius: '12px', fontSize: '1rem', border: '1px solid var(--border)', lineHeight: '1.6' }}>
+                <pre style={{ background: 'rgba(0,0,0,0.3)', padding: '15px', borderRadius: '8px', fontSize: '0.9rem', border: '1px solid var(--border)', lineHeight: '1.5', overflowX: 'auto' }}>
 {`ArrayList<Student> students;`}
                 </pre>
               </div>
 
               <div>
-                <p style={{ fontWeight: '700', color: 'var(--primary)', marginBottom: '1rem', fontSize: '1.1rem' }}>
-                  🔥 Function Names (لازم الكل يلتزم بيها)
+                <p style={{ fontWeight: '700', color: 'var(--primary)', marginBottom: '0.8rem', fontSize: '1rem' }}>
+                  🔥 Function Names
                 </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', background: 'rgba(139, 92, 246, 0.08)', padding: '1.5rem', borderRadius: '12px', border: '1px solid rgba(139, 92, 246, 0.2)' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', background: 'rgba(139, 92, 246, 0.08)', padding: '1rem', borderRadius: '10px', border: '1px solid rgba(139, 92, 246, 0.2)' }}>
                   <div>
-                    <p style={{ fontSize: '0.85rem', fontWeight: 'bold', opacity: 0.8, marginBottom: '0.4rem', color: 'var(--primary)' }}>📌 في كلاس Student:</p>
-                    <code style={{ fontSize: '0.95rem', fontWeight: '600', color: 'var(--text)' }}>addSubject(), calculateGPA(), displayStudentInfo()</code>
+                    <p style={{ fontSize: '0.75rem', fontWeight: 'bold', opacity: 0.8, color: 'var(--primary)' }}>📌 Student:</p>
+                    <code style={{ fontSize: '0.85rem', fontWeight: '600' }}>addSubject(), calculateGPA()...</code>
                   </div>
-                  <div style={{ paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                    <p style={{ fontSize: '0.85rem', fontWeight: 'bold', opacity: 0.8, marginBottom: '0.4rem', color: 'var(--primary)' }}>📌 في كلاس ManagementSystem:</p>
-                    <code style={{ fontSize: '0.95rem', fontWeight: '600', color: 'var(--text)' }}>addStudent(), searchStudent(), addSubjectToStudent()</code>
+                  <div style={{ paddingTop: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                    <p style={{ fontSize: '0.75rem', fontWeight: 'bold', opacity: 0.8, color: 'var(--primary)' }}>📌 System:</p>
+                    <code style={{ fontSize: '0.85rem', fontWeight: '600' }}>addStudent(), searchStudent()...</code>
                   </div>
                 </div>
               </div>
 
-              <div style={{ mt: 'auto', padding: '20px', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '12px', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
-                <p style={{ fontWeight: '800', color: '#ef4444', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.1rem', marginBottom: '10px' }}>
-                  ⚠️ مهم جدًا لجميع أعضاء الفريق:
+              <div style={{ padding: '15px', background: 'rgba(239, 68, 68, 0.05)', borderRadius: '10px', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+                <p style={{ fontWeight: '700', color: '#ef4444', fontSize: '0.9rem', marginBottom: '5px' }}>
+                  ⚠️ مهم جداً:
                 </p>
-                <ul style={{ fontSize: '1rem', listStyleType: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><div style={{ width: '6px', height: '6px', background: '#ef4444', borderRadius: '50%' }}></div> استخدم نفس الأسماء بالحرف (camelCase)</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><div style={{ width: '6px', height: '6px', background: '#ef4444', borderRadius: '50%' }}></div> متغير grade يكون نوعه double</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><div style={{ width: '6px', height: '6px', background: '#ef4444', borderRadius: '50%' }}></div> أسماء الـ ArrayList تكون بالضبط: subjects & students</li>
+                <ul style={{ fontSize: '0.8rem', listStyleType: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '4px', opacity: 0.9 }}>
+                  <li>• استخدم camelCase</li>
+                  <li>• نوع grade هو double</li>
                 </ul>
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </motion.div>
