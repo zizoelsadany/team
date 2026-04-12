@@ -1,4 +1,4 @@
-const mockDb = require('../config/mockDb');
+const { db } = require('../config/firebase');
 
 const createTask = async (req, res) => {
   const { title, description, assignedTo, section, deadline } = req.body;
@@ -9,10 +9,12 @@ const createTask = async (req, res) => {
       assignedTo: Array.isArray(assignedTo) ? assignedTo : [assignedTo],
       section,
       deadline,
+      status: 'Pending',
+      files: [],
       createdAt: new Date().toISOString()
     };
-    const newTask = mockDb.tasks.create(taskData);
-    res.status(201).json(newTask);
+    const docRef = await db.collection('tasks').add(taskData);
+    res.status(201).json({ _id: docRef.id, ...taskData });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -20,12 +22,22 @@ const createTask = async (req, res) => {
 
 const getTasks = async (req, res) => {
   try {
-    let tasks;
+    const tasksSnapshot = await db.collection('tasks').get();
+    let tasks = tasksSnapshot.docs.map(doc => ({ _id: doc.id, ...doc.data() }));
+
     if (req.user.role !== 'Admin') {
-      tasks = mockDb.tasks.find({ assignedTo: req.user._id });
-    } else {
-      tasks = mockDb.tasks.find();
+      tasks = tasks.filter(t => t.assignedTo.includes(req.user._id));
     }
+    
+    // Populate users (Optional but recommended for UI consistency)
+    const usersSnapshot = await db.collection('users').get();
+    const users = usersSnapshot.docs.map(doc => ({ _id: doc.id, ...doc.data() }));
+    
+    tasks = tasks.map(t => ({
+      ...t,
+      assignedTo: t.assignedTo.map(id => users.find(u => u._id === id) || id)
+    }));
+
     res.json(tasks);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -34,11 +46,11 @@ const getTasks = async (req, res) => {
 
 const completeTask = async (req, res) => {
   try {
-    const task = mockDb.tasks.findById(req.params.id);
-    if (task) {
-      task.status = 'Completed';
-      const updatedTask = mockDb.tasks.save(task);
-      res.json(updatedTask);
+    const taskRef = db.collection('tasks').doc(req.params.id);
+    const task = await taskRef.get();
+    if (task.exists) {
+      await taskRef.update({ status: 'Completed' });
+      res.json({ _id: task.id, ...task.data(), status: 'Completed' });
     } else {
       res.status(404).json({ message: 'Task not found' });
     }
@@ -52,44 +64,38 @@ const uploadFile = async (req, res) => {
     const { id } = req.params;
     const { url, name } = req.body;
 
-    if (!url) {
-      return res.status(400).json({ message: 'Cloudinary URL is required' });
+    if (!url) return res.status(400).json({ message: 'URL is required' });
+
+    const taskRef = db.collection('tasks').doc(id);
+    const task = await taskRef.get();
+
+    if (task.exists) {
+      const existingFiles = task.data().files || [];
+      const fileData = {
+        name: name || 'Uploaded File',
+        url: url,
+        uploadedAt: new Date().toISOString(),
+        status: 'Pending'
+      };
+      
+      await taskRef.update({
+        files: [...existingFiles, fileData]
+      });
+      
+      res.json({ message: 'File uploaded and saved to Firebase' });
+    } else {
+      res.status(404).json({ message: 'Task not found' });
     }
-
-    const task = mockDb.tasks.findById(id);
-    if (!task) {
-      return res.status(404).json({ message: 'Task not found' });
-    }
-
-    const fileData = {
-      name: name || 'Uploaded File',
-      url: url,
-      uploadedAt: new Date().toISOString(),
-      status: 'Pending'
-    };
-
-    task.files = [...(task.files || []), fileData];
-    const updatedTask = mockDb.tasks.save(task);
-
-    res.json(updatedTask);
   } catch (error) {
-    console.error('Server Upload Error:', error);
-    res.status(500).json({ 
-      message: 'Internal Server Error during file save',
-      details: error.message 
-    });
+    console.error('Firebase Upload Error:', error);
+    res.status(500).json({ message: error.message });
   }
 };
 
 const deleteTask = async (req, res) => {
   try {
-    const task = mockDb.tasks.findById(req.params.id);
-    if (task) {
-      mockDb.tasks.delete(req.params.id);
-      res.json({ message: 'Task removed' });
-    } else {
-      res.status(404).json({ message: 'Task not found' });
-    }
+    await db.collection('tasks').doc(req.params.id).delete();
+    res.json({ message: 'Task removed' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
