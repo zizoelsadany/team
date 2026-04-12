@@ -64,19 +64,47 @@ const Tasks = () => {
     } catch (err) { alert('Error completing task'); }
   };
 
-  const handleFileUpload = async (taskId, file) => {
+  const uploadFileToCloudinary = async (file) => {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
+    formData.append("upload_preset", "zizoteam");
+
     try {
-      await axios.post(`/api/tasks/${taskId}/upload`, formData, {
+      const res = await fetch("https://api.cloudinary.com/v1_1/dvbpridc6/upload", {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+      return data.secure_url;
+    } catch (err) {
+      console.error("Cloudinary Error:", err);
+      throw new Error("Cloudinary upload failed");
+    }
+  };
+
+  const handleFileUpload = async (taskId, file) => {
+    if (!file) return;
+    
+    try {
+      // 1. Upload to Cloudinary
+      const cloudinaryUrl = await uploadFileToCloudinary(file);
+      
+      // 2. Save URL to our backend
+      await axios.post(`/api/tasks/${taskId}/upload`, {
+        url: cloudinaryUrl,
+        name: file.name
+      }, {
         headers: { 
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
+          Authorization: `Bearer ${token}`
         }
       });
+      
       alert('File uploaded successfully!');
       fetchTasks();
-    } catch (err) { alert('Upload failed'); }
+    } catch (err) { 
+      console.error(err);
+      alert('Upload failed: ' + err.message); 
+    }
   };
 
   const handleDeleteTask = async (id) => {
@@ -217,7 +245,7 @@ const Tasks = () => {
                  {task.files.map((f, i) => (
                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', opacity: 0.8, marginBottom: '4px' }}>
                      <FileText size={12} />
-                     <a href={`/${f.url}`} target="_blank" rel="noreferrer" style={{ color: 'var(--primary)', textDecoration: 'none' }}>{f.name}</a>
+                     <a href={f.url} target="_blank" rel="noreferrer" style={{ color: 'var(--primary)', textDecoration: 'none' }}>{f.name}</a>
                    </div>
                  ))}
               </div>

@@ -22,7 +22,13 @@
     "section": "Testing",
     "deadline": "2026-04-20",
     "_id": "1775855728156",
-    "files": [],
+    "files": [
+      {
+        "name": ".gitignore",
+        "url": "uploads\\1775920076221-.gitignore",
+        "status": "Pending"
+      }
+    ],
     "status": "Pending"
   },
   {

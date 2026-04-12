@@ -51,9 +51,11 @@ const uploadFile = async (req, res) => {
   try {
     const task = mockDb.tasks.findById(req.params.id);
     if (task) {
+      const { url, name } = req.body;
       const fileData = {
-        name: req.file.originalname,
-        url: req.file.path,
+        name: name || 'Uploaded File',
+        url: url,
+        uploadedAt: new Date().toISOString(),
         status: 'Pending'
       };
       task.files = [...(task.files || []), fileData];

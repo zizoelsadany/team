@@ -13,7 +13,7 @@ const upload = multer({ storage });
 router.post('/', protect, admin, createTask);
 router.get('/', protect, getTasks);
 router.put('/:id/complete', protect, completeTask);
-router.post('/:id/upload', protect, upload.single('file'), uploadFile);
+router.post('/:id/upload', protect, uploadFile);
 router.delete('/:id', protect, admin, deleteTask);
 
 module.exports = router;
