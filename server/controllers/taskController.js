@@ -49,23 +49,35 @@ const completeTask = async (req, res) => {
 
 const uploadFile = async (req, res) => {
   try {
-    const task = mockDb.tasks.findById(req.params.id);
-    if (task) {
-      const { url, name } = req.body;
-      const fileData = {
-        name: name || 'Uploaded File',
-        url: url,
-        uploadedAt: new Date().toISOString(),
-        status: 'Pending'
-      };
-      task.files = [...(task.files || []), fileData];
-      const updatedTask = mockDb.tasks.save(task);
-      res.json(updatedTask);
-    } else {
-      res.status(404).json({ message: 'Task not found' });
+    const { id } = req.params;
+    const { url, name } = req.body;
+
+    if (!url) {
+      return res.status(400).json({ message: 'Cloudinary URL is required' });
     }
+
+    const task = mockDb.tasks.findById(id);
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+
+    const fileData = {
+      name: name || 'Uploaded File',
+      url: url,
+      uploadedAt: new Date().toISOString(),
+      status: 'Pending'
+    };
+
+    task.files = [...(task.files || []), fileData];
+    const updatedTask = mockDb.tasks.save(task);
+
+    res.json(updatedTask);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Server Upload Error:', error);
+    res.status(500).json({ 
+      message: 'Internal Server Error during file save',
+      details: error.message 
+    });
   }
 };
 

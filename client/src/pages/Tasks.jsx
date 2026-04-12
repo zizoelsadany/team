@@ -74,11 +74,17 @@ const Tasks = () => {
         method: "POST",
         body: formData
       });
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error?.message || "Cloudinary Upload Failed");
+      }
+
       const data = await res.json();
       return data.secure_url;
     } catch (err) {
       console.error("Cloudinary Error:", err);
-      throw new Error("Cloudinary upload failed");
+      throw err;
     }
   };
 
@@ -89,21 +95,29 @@ const Tasks = () => {
       // 1. Upload to Cloudinary
       const cloudinaryUrl = await uploadFileToCloudinary(file);
       
+      if (!cloudinaryUrl) {
+        throw new Error("Cloudinary did not return a valid URL");
+      }
+      
       // 2. Save URL to our backend
-      await axios.post(`/api/tasks/${taskId}/upload`, {
+      const response = await axios.post(`/api/tasks/${taskId}/upload`, {
         url: cloudinaryUrl,
         name: file.name
       }, {
         headers: { 
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
       });
       
+      console.log('Server response:', response.data);
       alert('File uploaded successfully!');
       fetchTasks();
     } catch (err) { 
-      console.error(err);
-      alert('Upload failed: ' + err.message); 
+      console.error('Upload Process Error:', err);
+      const errorMsg = err.response?.data?.message || err.message;
+      const errorDetails = err.response?.data?.details || '';
+      alert(`Upload failed: ${errorMsg} ${errorDetails}`); 
     }
   };
 
