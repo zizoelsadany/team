@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { db } = require('../config/firebase');
+const mockDb = require('../config/mockDb');
 
 const protect = async (req, res, next) => {
   let token;
@@ -8,13 +8,13 @@ const protect = async (req, res, next) => {
       token = req.headers.authorization.split(' ')[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      const userDoc = await db.collection('users').doc(decoded.id).get();
+      const user = mockDb.users.findById(decoded.id);
 
-      if (!userDoc.exists) {
+      if (!user) {
         throw new Error('User not found');
       }
 
-      req.user = { _id: userDoc.id, ...userDoc.data() };
+      req.user = user;
       next();
     } catch (error) {
       res.status(401).json({ message: 'Not authorized' });
